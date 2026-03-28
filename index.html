@@ -1,164 +1,264 @@
-<style>
-    :root {
-        --bg1: #0f1724;
-        --bg2: #061021;
-        --card: #0b1220;
-        --accent: #e11d48;
-        --muted: #97a0b3;
-        --glass: rgba(255, 255, 255, 0.04);
-        --glass-2: rgba(255, 255, 255, 0.02);
-        --success: #10b981;
-    }
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TOP SECRET: Mission Briefing</title>
+    <style>
+        :root {
+            --bg1: #0f1724;
+            --bg2: #061021;
+            --card: #0b1220;
+            --accent: #e11d48;
+            --muted: #97a0b3;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-2: rgba(255, 255, 255, 0.02);
+            --success: #10b981;
+        }
 
-    html, body {
-        height: 100%;
-        margin: 0;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        background: linear-gradient(135deg, var(--bg1), var(--bg2));
-        color: #e6eef8;
-        overflow-x: hidden;
-    }
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: #e6eef8;
+            overflow-x: hidden;
+        }
 
-    .wrap {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-    }
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
 
-    .panel {
-        width: 100%;
-        max-width: 480px;
-        background: linear-gradient(180deg, var(--card), #071225 80%);
-        border-radius: 16px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        padding: 30px 20px;
-        position: relative;
-        overflow: hidden; /* Keeps the glow inside but shows the stamp */
-        border: 1px solid rgba(255, 255, 255, 0.05);
-    }
+        .panel {
+            width: 100%;
+            max-width: 440px; /* Optimized for mobile width */
+            background: linear-gradient(180deg, var(--card), #071225 80%);
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            padding: 32px 24px;
+            position: relative;
+            overflow: hidden; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    /* FIX: Stamp is now fully visible and correctly layered */
-    .stamp {
-        position: absolute;
-        top: 15px;
-        right: 15px; /* Moved in so it doesn't cut off */
-        width: 100px;
-        height: 100px;
-        transform: rotate(12deg);
-        pointer-events: none;
-        z-index: 2;
-        opacity: 0.9;
-    }
+        /* FIX: Stamp is fully visible and moved inward */
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px; 
+            width: 100px;
+            height: 100px;
+            transform: rotate(12deg);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.85;
+        }
 
-    .header {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        position: relative;
-        z-index: 5;
-    }
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            position: relative;
+            z-index: 5;
+        }
 
-    /* FIX: Expanded Badge to keep "SECRET" on one line */
-    .badge {
-        background: linear-gradient(180deg, #111d2b, #0a2230);
-        border-radius: 8px;
-        padding: 12px 20px; /* Wider padding */
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        width: fit-content; /* Shrink-wraps to the text */
-        min-width: 160px; /* Ensures enough room for the text */
-        border: 1px solid rgba(225, 29, 72, 0.4);
-        margin-left: -5px; /* Shifting slightly left as requested */
-    }
+        /* FIX: Expanded Badge to keep "TOP SECRET" on one line & shifted left */
+        .badge {
+            background: linear-gradient(180deg, #111d2b, #0a2230);
+            border-radius: 10px;
+            padding: 14px 22px; 
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+            min-width: 170px; 
+            border: 1px solid rgba(225, 29, 72, 0.4);
+            margin-left: -8px; /* Shifted left as requested */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
 
-    .badge h1 {
-        margin: 0;
-        font-size: 18px;
-        color: var(--accent);
-        letter-spacing: 2px;
-        white-space: nowrap; /* Forces text to stay on one line */
-        font-weight: 900;
-    }
+        .badge h1 {
+            margin: 0;
+            font-size: 19px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            white-space: nowrap; /* Forces one line */
+            font-weight: 900;
+            text-transform: uppercase;
+        }
 
-    .badge p {
-        margin: 2px 0 0;
-        font-size: 11px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
+        .badge p {
+            margin: 4px 0 0;
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
 
-    .title h2 {
-        margin: 10px 0 0;
-        font-size: 22px;
-        font-weight: 800;
-        line-height: 1.2;
-        letter-spacing: -0.5px;
-    }
+        .title h2 {
+            margin: 8px 0 0;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
 
-    .title p {
-        margin: 6px 0 0;
-        color: var(--muted);
-        font-size: 14px;
-        opacity: 0.8;
-    }
+        .title-meta {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
-    /* Mission Body Styling */
-    .mission {
-        margin-top: 24px;
-        background: var(--glass);
-        border-radius: 12px;
-        padding: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        position: relative;
-        z-index: 5;
-    }
+        .title-meta p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
 
-    .mission-body p {
-        margin: 0;
-        color: #e6eef8;
-        font-size: 15px;
-        line-height: 1.6;
-    }
+        .mission-id-block {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 12px;
+        }
 
-    /* Buttons & Controls */
-    .controls {
-        margin-top: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+        .mission-id-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    .btn, button {
-        width: 100%;
-        padding: 14px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        font-size: 15px;
-        border: none;
-        transition: transform 0.1s ease;
-    }
+        .mission-id-value {
+            font-weight: 800;
+            font-size: 18px;
+            color: #fff;
+        }
 
-    .btn.primary {
-        background: linear-gradient(180deg, var(--accent), #bb173f);
-        color: #fff;
-        box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
-    }
+        .mission {
+            margin-top: 28px;
+            background: var(--glass);
+            border-radius: 12px;
+            padding: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 5;
+        }
 
-    #reset {
-        background: rgba(255,255,255,0.03);
-        color: var(--muted);
-        border: 1px solid rgba(255,255,255,0.08);
-    }
-    
-    .status-area {
-        text-align: right;
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 5px;
-    }
-</style>
+        .mission p {
+            margin: 0;
+            color: #e6eef8;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .controls {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn, button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn.primary {
+            background: linear-gradient(180deg, var(--accent), #bb173f);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+        }
+
+        #reset {
+            background: rgba(255,255,255,0.03);
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .status-footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .status-val {
+            font-weight: 700;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="panel">
+            <div class="stamp" aria-hidden="true">
+                <svg viewBox="0 0 220 220" width="100%" height="100%">
+                    <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(225,29,72,0.2)" stroke-width="8" stroke-dasharray="8 10" />
+                    <text x="110" y="105" font-family="sans-serif" font-weight="900" font-size="28" fill="rgba(225,29,72,0.9)" text-anchor="middle">TOP</text>
+                    <text x="110" y="145" font-family="sans-serif" font-weight="900" font-size="28" fill="rgba(225,29,72,0.9)" text-anchor="middle">SECRET</text>
+                </svg>
+            </div>
+
+            <div class="header">
+                <div class="badge">
+                    <h1>TOP SECRET</h1>
+                    <p>Classified</p>
+                </div>
+
+                <div class="title">
+                    <h2>Mission Briefing — Agent Mandy</h2>
+                    <div class="title-meta">
+                        <p>Objective window: 72 hours</p>
+                        <p>Location: Public spaces</p>
+                    </div>
+                </div>
+
+                <div class="mission-id-block">
+                    <div class="mission-id-label">Mission ID</div>
+                    <div class="mission-id-value">SM-0426</div>
+                </div>
+            </div>
+
+            <div class="mission">
+                <p id="mission-text">
+                    Proceed to approach five different strangers (mixed genders) within the 72-hour window. Secure a selfie with each person. Complete this mission and you shall receive on the next.
+                </p>
+            </div>
+
+            <div class="controls">
+                <button class="btn primary" id="verify">Verify Mission</button>
+                <button id="reset">Reset Mission</button>
+            </div>
+
+            <div class="status-footer">
+                Status: <span class="status-val" id="status">NOT STARTED</span>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Placeholder for logic
+        document.getElementById('verify').addEventListener('click', () => {
+            document.getElementById('status').innerText = 'PENDING VERIFICATION';
+            document.getElementById('status').style.color = '#f59e0b';
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            document.getElementById('status').innerText = 'NOT STARTED';
+            document.getElementById('status').style.color = '#fff';
+        });
+    </script>
+</body>
+</html>
