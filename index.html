@@ -1,229 +1,118 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>TOP SECRET: Mission Briefing</title>
-    <style>
-    /* Mobile tweaks to improve layout on small screens */
-    @media (max-width:480px){
-        .stamp{display:none !important;}
-        .panel{padding:16px !important;border-radius:12px;}
-        .header{flex-direction:column;align-items:flex-start;gap:10px;}
-        .title{width:100%;}
-        .title h2{font-size:18px;}
-        .badge{width:100%;height:auto;flex-direction:row;align-items:center;justify-content:flex-start;padding:8px;gap:10px;}
-        .badge h1{font-size:14px;}
-        .mission pre{font-size:13px;white-space:pre-wrap;}
-        .controls{flex-direction:column;align-items:stretch;gap:8px;}
-        .checklist{grid-template-columns:1fr;}
-        .slot{padding:10px;}
-        .preview{width:72px;height:72px;}
-        .footer{flex-direction:column;align-items:flex-start;gap:8px;}
+<style>
+    :root {
+        --bg1: #0f1724;
+        --bg2: #061021;
+        --card: #0b1220;
+        --accent: #e11d48;
+        --muted: #97a0b3;
+        --glass: rgba(255, 255, 255, 0.04);
+        --glass-2: rgba(255, 255, 255, 0.02);
+        --success: #10b981;
     }
 
-    /* Make the page informational only: remove photo upload UI */
-    .controls,
-    .checklist,
-    .footer { display: none !important; }
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        background: linear-gradient(135deg, var(--bg1), var(--bg2));
+        color: #e6eef8;
+        overflow-x: hidden;
+    }
 
-    /* If JS still generates slots, hide upload-specific elements cleanly */
-    .slot { background: transparent !important; border: none !important; padding: 0 !important; gap: 0 !important; }
-    .slot .preview,
-    .slot .upload,
-    .slot input[type="file"],
-    .slot button[id^="clear"],
-    .slot label.upload { display: none !important; }
+    .wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem; /* Reduced for mobile breathability */
+    }
 
-    /* Emphasize mission text when uploads are removed */
-    .mission { padding: 22px !important; flex-direction: column; }
-    .mission pre { white-space: pre-wrap; font-size: 15px; margin: 0; }
+    .panel {
+        width: 100%;
+        max-width: 500px; /* Better fit for mobile/tablet */
+        background: linear-gradient(180deg, var(--card), #071225 80%);
+        border-radius: 20px;
+        box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+        padding: 32px 24px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-    /* Keep panel balanced without controls/checklist/footer */
-    .panel { padding-bottom: 28px; }
-    </style>
-    <style>
-        :root{
-            --bg1:#0f1724;
-            --bg2:#061021;
-            --card:#0b1220;
-            --accent:#e11d48;
-            --muted:#97a0b3;
-            --glass: rgba(255,255,255,0.04);
-            --glass-2: rgba(255,255,255,0.02);
-            --success:#10b981;
-        }
-        html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#e6eef8;}
-        .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:3rem;}
-        .panel{
-            width:980px;
-            max-width:95%;
-            background:linear-gradient(180deg,var(--card), #071225 80%);
-            border-radius:14px;
-            box-shadow:0 8px 40px rgba(2,6,23,0.6);
-            padding:28px;
-            position:relative;
-            overflow:hidden;
-            border:1px solid rgba(255,255,255,0.03);
-        }
-        /* TOP SECRET stamp */
-        .stamp{
-            position:absolute;
-            right:-60px;
-            top:20px;
-            width:260px;
-            height:260px;
-            transform:rotate(18deg);
-            display:flex;align-items:center;justify-content:center;
-            pointer-events:none;
-            z-index:0;
-        }
-        .stamp .ring{
-            width:220px;height:220px;border-radius:50%;
-            border:8px dashed rgba(225,29,72,0.18);
-            display:flex;align-items:center;justify-content:center;
-            color:rgba(225,29,72,0.95);
-            font-weight:800;letter-spacing:2px;font-size:20px;
-            text-transform:uppercase;
-            backdrop-filter: blur(2px);
-        }
-        .header{
-            display:flex;gap:20px;align-items:center;
-        }
-        .badge{
-            background:linear-gradient(180deg,#061524,#0a2230);
-            border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-            width:140px;height:88px;border:1px solid rgba(255,255,255,0.03);
-        }
-        .badge h1{margin:0;font-size:18px;color:var(--accent);letter-spacing:1px;}
-        .badge p{margin:4px 0 0;font-size:12px;color:var(--muted);}
-        .title{
-            flex:1;
-        }
-        .title h2{margin:0;font-size:20px;letter-spacing:0.6px;}
-        .title p{margin:6px 0 0;color:var(--muted);font-size:13px;}
-        .mission{
-            margin-top:18px;
-            background:linear-gradient(180deg,var(--glass),var(--glass-2));
-            border-radius:10px;padding:18px;border:1px solid rgba(255,255,255,0.02);
-            display:flex;gap:18px;align-items:flex-start;
-            position:relative;
-            z-index:1;
-        }
-        .mission pre{
-            margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;
-            color:#fff;background:transparent;border:none;font-size:13px;line-height:1.5;
-            white-space:pre-wrap;
-        }
-        .controls{
-            margin-top:18px;display:flex;gap:12px;align-items:center;
-        }
-        button, .btn{
-            background:linear-gradient(180deg,#0f2740,#082033);
-            color:#dbeafe;border:1px solid rgba(255,255,255,0.04);
-            padding:10px 12px;border-radius:8px;font-weight:600;cursor:pointer;
-        }
-        .btn.primary{
-            background:linear-gradient(180deg,var(--accent),#bb173f);
-            color:#fff;border:none;
-        }
-        .checklist{
-            margin-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
-        }
-        .slot{
-            background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.03);display:flex;gap:10px;align-items:center;
-        }
-        .slot input[type="file"]{display:none;}
-        .slot label.upload{
-            background:rgba(255,255,255,0.03);padding:8px;border-radius:8px;border:1px dashed rgba(255,255,255,0.03);cursor:pointer;font-size:12px;color:var(--muted);
-        }
-        .slot .info{flex:1;font-size:13px;color:var(--muted);}
-        .slot .preview{width:56px;height:56px;border-radius:8px;background:linear-gradient(180deg,#071826,#05212b);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;border:1px solid rgba(255,255,255,0.02);overflow:hidden;}
-        .slot .preview img{width:100%;height:100%;object-fit:cover;display:block;}
-        .footer{
-            margin-top:18px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;
-        }
-        .status{font-weight:700;}
-        .success{color:var(--success);}
-        .hidden{display:none;}
-        /* responsive */
-        @media (max-width:640px){
-            .checklist{grid-template-columns:1fr;}
-            .badge{width:86px;height:70px;padding:8px;}
-        }
-    </style>
-</head>
-<body>
-    <div class="wrap">
-        <section class="panel" role="region" aria-label="Mission Briefing">
-            <div class="stamp" aria-hidden="true"
-                style="display:flex !important; right:clamp(-40px,2vw,-60px); top:clamp(8px,2.5vh,20px); width:clamp(96px,18vw,220px); height:clamp(96px,18vw,220px); transform:rotate(14deg); z-index:0;">
-              <svg viewBox="0 0 220 220" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible;">
-                <defs>
-                 <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
-                   <feGaussianBlur stdDeviation="0.6" result="b"/>
-                   <feMerge>
-                    <feMergeNode in="b"/>
-                    <feMergeNode in="SourceGraphic"/>
-                   </feMerge>
-                 </filter>
-                </defs>
+    /* FIX: The TOP SECRET Stamp */
+    .stamp {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 140px;
+        height: 140px;
+        transform: rotate(15deg);
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0.8;
+    }
 
-                <!-- outer dashed ring -->
-                <circle cx="110" cy="110" r="96" fill="none" stroke="rgba(225,29,72,0.14)" stroke-width="10" stroke-dasharray="6 8" />
+    .header {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+        z-index: 5;
+    }
 
-                <!-- subtle inner fill for contrast -->
-                <circle cx="110" cy="110" r="64" fill="rgba(225,29,72,0.02)" />
+    /* FIX: Bigger Badge */
+    .badge {
+        background: linear-gradient(180deg, #111d2b, #0a2230);
+        border-radius: 12px;
+        padding: 16px;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+        border: 1px solid rgba(225, 29, 72, 0.3);
+    }
 
-                <!-- centered stacked text, scales with viewBox -->
-                <text x="110" y="106" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26" fill="rgba(225,29,72,0.95)" text-anchor="middle" style="letter-spacing:1px;">TOP</text>
-                <text x="110" y="142" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26" fill="rgba(225,29,72,0.95)" text-anchor="middle" style="letter-spacing:1px;">SECRET</text>
-              </svg>
-            </div>
+    .badge h1 {
+        margin: 0;
+        font-size: 20px;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+    }
 
-            <div class="header">
-                <div class="badge" aria-hidden="true">
-                    <h1>TOP SECRET</h1>
-                    <p>CLASSIFIED</p>
-                </div>
-                <div class="title">
-                    <h2>Mission Briefing — Agent Mandy</h2>
-                    <p>Objective window: 72hours</p> 
-                    <p>Location: Public spaces</p>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-size:13px;color:var(--muted)">Mission ID</div>
-                    <div style="font-weight:800;letter-spacing:1px">SM-0426</div>
-                </div>
-            </div>
+    .badge p {
+        margin: 4px 0 0;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-            <div class="mission" role="article" aria-label="Mission details">
-                <pre>
-Proceed to approach five different strangers (mixed genders) within the 72-hour window. Secure a selfie with each person. Complete this mission and you shall receive on the next.
-                </pre>
-            </div>
-            <script>
-                (function(){
-                    const pre = document.querySelector('.mission pre');
-                    if(!pre) return;
-                    const raw = pre.textContent.replace(/\r/g,'').trim();
-                    const parts = raw.split(/\n{1,}|\n\s*\n/).map(p=>p.trim()).filter(Boolean);
-                    const container = document.createElement('div');
-                    container.className = 'mission-body';
-                    container.style.display = 'flex';
-                    container.style.flexDirection = 'column';
-                    container.style.gap = '8px';
-                    container.innerHTML = parts.map(p=>' <p style="margin:0;color:#e6eef8;font-size:15px;line-height:1.5;">'+p+'</p>').join('');
-                    pre.parentNode.replaceChild(container, pre);
-                })();
-            </script>
-            <div class="controls">
-                <button id="reset" title="Clear all slots">Reset Mission</button>
-                <button class="btn primary" id="verify">Verify Mission</button>
-                <div style="margin-left:auto;color:var(--muted);font-size:13px">Status: <span id="status" class="status">Not started</span></div>
-            </div>
-        </section>
-    </div>
-</body>
-</html>
+    .title h2 {
+        margin: 0;
+        font-size: 24px; /* Larger title */
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .title p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .mission-id-box {
+        margin-top: 10px;
+    }
+
+    .mission-id-label {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+    }
+
+    .mission-id-value {
+        font-weight: 800;
+        letter-spacing: 1px;
+        font-size: 18px;
+        color: #fff;
