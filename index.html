@@ -13,7 +13,7 @@
     html, body {
         height: 100%;
         margin: 0;
-        font-family: Inter, system-ui, sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         background: linear-gradient(135deg, var(--bg1), var(--bg2));
         color: #e6eef8;
         overflow-x: hidden;
@@ -24,95 +24,141 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1.5rem; /* Reduced for mobile breathability */
+        padding: 1rem;
     }
 
     .panel {
         width: 100%;
-        max-width: 500px; /* Better fit for mobile/tablet */
+        max-width: 480px;
         background: linear-gradient(180deg, var(--card), #071225 80%);
-        border-radius: 20px;
-        box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
-        padding: 32px 24px;
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        padding: 30px 20px;
         position: relative;
-        overflow: hidden;
+        overflow: hidden; /* Keeps the glow inside but shows the stamp */
         border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* FIX: The TOP SECRET Stamp */
+    /* FIX: Stamp is now fully visible and correctly layered */
     .stamp {
         position: absolute;
-        top: -10px;
-        right: -10px;
-        width: 140px;
-        height: 140px;
-        transform: rotate(15deg);
+        top: 15px;
+        right: 15px; /* Moved in so it doesn't cut off */
+        width: 100px;
+        height: 100px;
+        transform: rotate(12deg);
         pointer-events: none;
-        z-index: 10;
-        opacity: 0.8;
+        z-index: 2;
+        opacity: 0.9;
     }
 
     .header {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 18px;
         position: relative;
         z-index: 5;
     }
 
-    /* FIX: Bigger Badge */
+    /* FIX: Expanded Badge to keep "SECRET" on one line */
     .badge {
         background: linear-gradient(180deg, #111d2b, #0a2230);
-        border-radius: 12px;
-        padding: 16px;
+        border-radius: 8px;
+        padding: 12px 20px; /* Wider padding */
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        width: fit-content;
-        border: 1px solid rgba(225, 29, 72, 0.3);
+        width: fit-content; /* Shrink-wraps to the text */
+        min-width: 160px; /* Ensures enough room for the text */
+        border: 1px solid rgba(225, 29, 72, 0.4);
+        margin-left: -5px; /* Shifting slightly left as requested */
     }
 
     .badge h1 {
         margin: 0;
-        font-size: 20px;
+        font-size: 18px;
         color: var(--accent);
         letter-spacing: 2px;
-        text-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+        white-space: nowrap; /* Forces text to stay on one line */
+        font-weight: 900;
     }
 
     .badge p {
-        margin: 4px 0 0;
+        margin: 2px 0 0;
         font-size: 11px;
         color: var(--muted);
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
     }
 
     .title h2 {
-        margin: 0;
-        font-size: 24px; /* Larger title */
+        margin: 10px 0 0;
+        font-size: 22px;
         font-weight: 800;
         line-height: 1.2;
+        letter-spacing: -0.5px;
     }
 
     .title p {
-        margin: 8px 0 0;
+        margin: 6px 0 0;
         color: var(--muted);
         font-size: 14px;
+        opacity: 0.8;
     }
 
-    .mission-id-box {
-        margin-top: 10px;
+    /* Mission Body Styling */
+    .mission {
+        margin-top: 24px;
+        background: var(--glass);
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        z-index: 5;
     }
 
-    .mission-id-label {
+    .mission-body p {
+        margin: 0;
+        color: #e6eef8;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* Buttons & Controls */
+    .controls {
+        margin-top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn, button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 15px;
+        border: none;
+        transition: transform 0.1s ease;
+    }
+
+    .btn.primary {
+        background: linear-gradient(180deg, var(--accent), #bb173f);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+    }
+
+    #reset {
+        background: rgba(255,255,255,0.03);
+        color: var(--muted);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+    
+    .status-area {
+        text-align: right;
         font-size: 12px;
         color: var(--muted);
-        text-transform: uppercase;
+        margin-top: 5px;
     }
-
-    .mission-id-value {
-        font-weight: 800;
-        letter-spacing: 1px;
-        font-size: 18px;
-        color: #fff;
+</style>
